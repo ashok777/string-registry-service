@@ -9,19 +9,21 @@ To build and install the string-registry-service on your local workstation pleas
 	2. In a terminal window cd to the directory where you want the service repository clone deployed
 	3. run: git clone https://github.com/ashok777/string-registry-service.git
 	4. cd to string-registry-service
-	5. The service persists data to a text file in the local file system. Set the property 'local.datastore.file.path' in the 
-   	   application.properties file (in src/main/resources) to point to the needed file path. 
-   
-	6. run: mvnw clean package
+	5. The service persists data to a text file in the local file system. 
+	   Set the property 'local.datastore.file.path' in the application.properties 
+	   file (in src/main/resources) to point to the needed file path. 
 
+	6. run: mvnw clean package
+	
 	7. To run under spring boot enter
 	   mvnw spring-boot:run	
-	   The application is now installed without an url segment for the context. During testing use the following base url: 	
-	   http://localhost:8080/
-	   
-	8. To run under tomcat please deploy the war file (target/string-registry.war)to the tomcat webapps directory.
-	   The application is now installed with an url segment for the context. During testing use the following base url: 	
-	   http://localhost:8080/string-registry/
+	   The application is now installed without an url segment for the context.
+	   During testing use the following base url: http://localhost:8080/
+
+	8. To run under tomcat please deploy the war file (target/string-registry.war)to the tomcat 
+	   webapps directory.
+	   The application is now installed with an url segment for the context. 
+	   During testing use the following base url: http://localhost:8080/string-registry/
 
 #API Usage :
 
@@ -42,9 +44,9 @@ To build and install the string-registry-service on your local workstation pleas
 			"id": 3502,
 			"text": "The quick brown fox"
 		}
-		The response is returned with an id with which the string is identified and stored in the service's local data store.
-		Please note that the request content body has to strictly conform to the above json or else an Http 
-		BAD_REQUEST response will result.
+		The response is returned with an id with which the string is identified and 
+		stored in the service's local data store. Please note that the request content body 
+		has to strictly conform to the above json or else an Http BAD_REQUEST response will result.
 		
 	2. To retrieve a string, submit the following request using the general url pattern '/strings/{stringId}'	
 	
@@ -60,7 +62,8 @@ To build and install the string-registry-service on your local workstation pleas
 		}
 		]
 		
-	3. Error in user input will result in a standard error response; the following request has an incorrect url 	
+	3. Error in user input will result in a standard error response; 
+	   the following request has an incorrect url 	
 	
 		GET /strings/ddd/489
 		Accept: application/json
