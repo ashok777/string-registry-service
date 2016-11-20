@@ -18,14 +18,14 @@ To build and install the string-registry-service on your local workstation pleas
 	   Log files are written to the file specified in the 'logging.file' property; set it as needed
 
 	6. run: mvnw clean package
+	   This results in a .war file being produced (target/string-registry.war)
 	
 	7. To run under spring boot enter
 	   mvnw spring-boot:run	
 	   The application is now installed without an url segment for the context.
 	   During testing use the following base url: http://localhost:8080/
 
-	8. To run under tomcat please deploy the war file (target/string-registry.war)to the tomcat 
-	   webapps directory.
+	8. To run under tomcat please deploy the war file to the tomcat webapps directory.
 	   The application is now installed with an url segment for the context. 
 	   During testing use the following base url: http://localhost:8080/string-registry/
 
