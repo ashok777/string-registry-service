@@ -14,6 +14,14 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.stringregistry.model.ErrorResponse;
 
+/* We need to be able to handle exceptions arising from the application classes as well as from the 
+ * spring framework. A malformed request, for instance, will be rejected by the Spring DispatchServlet 
+ * and will not even make it to the application controller. By registering this 'global' handler we are 
+ * able to funnel all exceptions into this handler
+ * 
+ * Error codes are set to standard Http error codes
+ */
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -27,7 +35,7 @@ public class GlobalExceptionHandler {
 		
 		return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.valueOf(errorResponse.getErrorCode()));
 	}
-	private void setErrorIndication(Exception exception, ErrorResponse errorResponse){
+	private void setErrorIndication(Exception exception, ErrorResponse errorResponse) {
 		
 		errorResponse.setMessage("An error ocurred while processing your request. "+ exception.getMessage());
 		logger.error(exception.toString(), exception);

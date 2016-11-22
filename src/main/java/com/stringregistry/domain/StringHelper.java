@@ -24,8 +24,13 @@ public class StringHelper {
 	@Autowired
 	StringIdResolver stringIdResolver;
 	
-	Map<Integer, List<UnicodeString>> stringsMap = new HashMap<Integer, List<UnicodeString>>();
+	/* These 2 collection instances act as a memory cache. 
+	 * The map facilitates the lookup of strings associated with a given id.
+	 * The list, where all of the strings are maintained, facilitates the persistence into a 
+	 * local data store, something that is done whenever a new string is added
+	 */
 	
+	Map<Integer, List<UnicodeString>> stringsMap = new HashMap<Integer, List<UnicodeString>>();
 	List<UnicodeString> globalStringsList = new ArrayList<UnicodeString>();
 	
 	public StringHelper() {
@@ -53,6 +58,7 @@ public class StringHelper {
 		stringRegistryDAO.persistStrings(globalStringsList);
 		return string;
 	}
+	/* This function is invoked once, and only once during the life time of a server, and that is at startup*/	
 	public void readFromStoreAndLoadIntoMemoryCache() throws Exception {
 		
 		List<UnicodeString> stringData = stringRegistryDAO.readStrings();
@@ -70,13 +76,17 @@ public class StringHelper {
 		Integer id = string.getId();
 		
 		if (id != null &&  id != 0) {
+			
 			if (stringsMap.containsKey(id)){
+				
 				stringsList = stringsMap.get(id);
 				stringsList.add(string);
+				
 			} else {
+				
 				stringsList.add(string);
 				stringsMap.put(id, stringsList);
-			}
+			}			
 			globalStringsList.add(string);
 		}	
 	}
