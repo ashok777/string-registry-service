@@ -42,7 +42,8 @@ public class GlobalExceptionHandler {
 		
 		if (exception instanceof NoHandlerFoundException || 
 			exception instanceof MethodArgumentTypeMismatchException ||
-		    exception instanceof HttpMessageNotReadableException) {
+		    exception instanceof HttpMessageNotReadableException ||
+		    exception instanceof IllegalArgumentException) {
 			
 			errorResponse.setErrorCode(HttpStatus.BAD_REQUEST.value());
 			

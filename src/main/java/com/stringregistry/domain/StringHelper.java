@@ -25,12 +25,12 @@ public class StringHelper {
 	StringIdResolver stringIdResolver;
 	
 	/* These 2 collection instances act as a memory cache. 
-	 * The map facilitates the lookup of strings associated with a given id.
+	 * The map facilitates the lookup of indexes  associated with a given string id.
 	 * The list, where all of the strings are maintained, facilitates the persistence into a 
 	 * local data store, something that is done whenever a new string is added
 	 */
 	
-	Map<Integer, List<UnicodeString>> stringsMap = new HashMap<Integer, List<UnicodeString>>();
+	Map<Integer, List<Integer>> globalIndexMap = new HashMap<Integer, List<Integer>>();
 	List<UnicodeString> globalStringsList = new ArrayList<UnicodeString>();
 	
 	public StringHelper() {
@@ -38,19 +38,32 @@ public class StringHelper {
 
 	public List<UnicodeString> lookupStringsForId(Integer id) throws Exception{
 		
-		List<UnicodeString> stringsList  = stringsMap.get(id);
+		List<Integer> indexList  = globalIndexMap.get(id);
 		
-		if (stringsList == null){
-			stringsList = new ArrayList<UnicodeString>();
+		if (indexList == null){
+			indexList = new ArrayList<Integer>();
 		} 
-		return stringsList;
+		List<UnicodeString> stringListRet = new ArrayList<UnicodeString>();
+		
+		for (Integer index: indexList) {
+			UnicodeString str = globalStringsList.get(index);
+			if (str != null) {
+				stringListRet.add(str);
+			}
+		}
+		return stringListRet;
 	}
 	public UnicodeString processStringAndSave(UnicodeString string) throws Exception{
+		
+		if ( (string == null ) || (string.getText() == null) || (string.getText().isEmpty())) {
+			
+			throw new IllegalArgumentException("Invalid text in payload");
+		}
 		
 		int id = stringIdResolver.getStringId(string.getText());
 		string.setId(id);
 		
-		if (stringsMap.containsKey(id)){
+		if ( (id != 0) && checkForExistenceInCache(string)){
 			throw new EntityExistsException(" String " + "'" + string.getText() + "'" + " already exists in registry");
 		}
 		addToMemoryCache(string);
@@ -72,22 +85,45 @@ public class StringHelper {
 	}
 	public void addToMemoryCache (UnicodeString string){
 		
-		List<UnicodeString> stringsList = new ArrayList<UnicodeString>();
+		List<Integer> indexList = new ArrayList<Integer>();
 		Integer id = string.getId();
 		
 		if (id != null &&  id != 0) {
 			
-			if (stringsMap.containsKey(id)){
+			globalStringsList.add(string);
+			Integer indexInGlobalList = globalStringsList.size()-1;
+			
+			if (globalIndexMap.containsKey(id)){
 				
-				stringsList = stringsMap.get(id);
-				stringsList.add(string);
+				indexList = globalIndexMap.get(id);
+				indexList.add(indexInGlobalList);
 				
 			} else {
 				
-				stringsList.add(string);
-				stringsMap.put(id, stringsList);
+				indexList.add(indexInGlobalList);
+				globalIndexMap.put(id, indexList);
 			}			
-			globalStringsList.add(string);
+			
 		}	
+	}
+	private boolean checkForExistenceInCache (UnicodeString str) {
+		
+		Integer id = str.getId();
+		List<Integer> indexList  = globalIndexMap.get(id);
+		
+		if (indexList != null) {
+	
+			for (Integer index: indexList){
+				
+				if (globalStringsList.get(index) != null) {
+					
+					String strInGlobalList = globalStringsList.get(index).getText();
+					if (str.getText().equals(strInGlobalList )){
+						return true;
+					}
+				}
+			}
+		}	
+		return false;
 	}
 }
