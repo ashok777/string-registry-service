@@ -13,9 +13,10 @@ To build and install the string-registry-service on your local workstation pleas
 	
 	   The service persists data to a text file in the local file system. 
 	   Set the property 'local.datastore.file.path' in the application.properties 
-	   file (in src/main/resources) to point to the needed file path. 
+	   file (in src/main/resources) to point to the needed fully qualified file path. 
 	   
-	   Log files are written to the file specified in the 'logging.file' property; set it as needed
+	   Log files are written to the file specified in the 'logging.file' property; 
+	   set the fully qualified file path as needed
 
 	6. run: mvnw clean package
 	   This results in a .war file being produced (target/string-registry.war)
@@ -66,7 +67,7 @@ To build and install the string-registry-service on your local workstation pleas
 		}
 		]
 		
-	3. Error in user input will result in a standard error response; 
+	3. Any error in user input will result in a standard error response; 
 	   the following request has an incorrect url 	
 	
 		GET /strings/ddd/489
