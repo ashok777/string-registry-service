@@ -1,9 +1,9 @@
 # string-registry-service
 A RESTful service that registers and retrieves Unicode strings
 
-#Building and Installing:
+#Building and Deploying:
 
-To build and install the string-registry-service on your local workstation please read the following instructions:
+To build and deploy the string-registry-service on your local workstation please read the following instructions:
 
 	1. Install JDK 1.8 and set JAVA_HOME to point to the installed directory
 	2. In a terminal window cd to the directory where you want the service repository clone deployed
